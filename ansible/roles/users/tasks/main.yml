@@ -1,0 +1,6 @@
+---
+# tasks file for users
+- name: Create service user
+  ansible.builtin.user:
+    name: nkom
+    comment: service user

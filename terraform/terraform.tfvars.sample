@@ -1,0 +1,10 @@
+selectel_token = 
+os_username = 
+os_password =
+region = 
+public_key =
+az_zone = 
+subnet_cidr =
+image = 
+vms = 
+vms_public = 

@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - users
+
+- hosts: app-*
+  roles:
+    - docker
+    - k8s

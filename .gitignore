@@ -1,0 +1,5 @@
+.terraform/
+terraform.tfvars
+rc.sh
+terraform.tfstate*
+.id_rsa
