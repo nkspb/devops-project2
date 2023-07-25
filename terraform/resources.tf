@@ -52,7 +52,7 @@ resource "openstack_blockstorage_volume_v3" "volume" {
 resource "openstack_compute_instance_v2" "vm" {
   count = length(var.vms)
   name              = var.vms[count.index]
-  flavor_id         = "1011"
+  flavor_id         = data.openstack_compute_flavor_v2.small.id
   key_pair          = openstack_compute_keypair_v2.nkom_ssh_key.id
   availability_zone = var.az_zone
   network {

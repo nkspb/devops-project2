@@ -40,10 +40,10 @@ variable "image" {
 
 variable "vms" {
 	type = list
-	description = "Names of vms to create"
+	description = "Names of app vms to create"
 }
 
 variable "vms_public" {
 	type = list
-	description = "Names of vms to associate public IP with"
+	description = "Names of app vms to associate public IP with"
 }
