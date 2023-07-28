@@ -4,3 +4,11 @@
   ansible.builtin.user:
     name: nkom
     comment: service user
+
+- name: Copy private key
+  ansible.builtin.copy:
+    src: ".id_rsa"
+    dest: /tmp/.id_rsa
+    owner: root
+    group: root
+    mode: "600"

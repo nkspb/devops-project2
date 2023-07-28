@@ -1,0 +1,36 @@
+---
+# tasks file for k8s_client
+- name: Install kubectl
+  community.general.snap:
+    name: kubectl
+    classic: yes
+    state: present
+
+- name: Install helm
+  community.general.snap:
+    name: helm
+    classic: yes
+    state: present
+
+- name: Create directories for kubectl config
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: nkom
+    group: nkom
+    mode: "755"
+  with_items:
+    - "/home/nkom/.minikube/profiles/minikube"
+    - "/home/nkom/.kube"
+  
+- name: Copy kubectl settings from k8s server to local
+  ansible.posix.synchronize:
+    src: "{{ item }}"
+    dest: "{{ item }}"
+    private_key: /tmp/.id_rsa
+  with_items:
+    - "/home/nkom/.minikube/profiles/minikube/client.crt"
+    - "/home/nkom/.minikube/profiles/minikube/client.key"
+    - "/home/nkom/.minikube/ca.crt"
+    - "/home/nkom/.kube/config"
+  delegate_to: app-1

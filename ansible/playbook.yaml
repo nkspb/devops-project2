@@ -1,9 +1,16 @@
 ---
-- hosts: all
+- name: Set up service users on all hosts
+  hosts: all
   roles:
     - users
 
-- hosts: app-*
+- name: Install docker and k8s on app hosts
+  hosts: app-*
   roles:
     - docker
     - k8s
+
+- name: Install kubelet and helm on dev hosts
+  hosts: dev-*
+  roles:
+    - k8s_client

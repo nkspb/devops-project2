@@ -5,8 +5,8 @@
     url: 'https://github.com/kubernetes/minikube/releases/download/v1.29.0/minikube-linux-amd64'
     dest: /tmp/minikube
 
-- name: Install minikube
-  ansible.builtin.shell: 'install /tmp/minikube /usr/local/bin/'
+# - name: Install minikube
+#   ansible.builtin.shell: 'install /tmp/minikube /usr/local/bin/'
 
 - name: Install kubectl
   community.general.snap:
@@ -14,7 +14,7 @@
     classic: yes
     state: present
 
-- name: Start minikube
-  ansible.builtin.shell: "minikube start --driver docker"
-  become: yes
-  become_user: nkom
+# - name: Start minikube
+#   ansible.builtin.shell: "minikube start --driver docker"
+#   become: yes
+#   become_user: nkom
