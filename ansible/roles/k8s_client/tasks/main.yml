@@ -34,3 +34,16 @@
     - "/home/nkom/.minikube/ca.crt"
     - "/home/nkom/.kube/config"
   delegate_to: app-1
+
+- name: Set k8s server in kubectl config
+  ansible.builtin.replace:
+    path: "/home/nkom/.kube/config"
+    replace: "server:{{ item }}"
+    regexp: '\server:\"'
+    owner: nkom
+    group: nkom
+    mode: '0500'
+  with_items:
+    -  http://{{ hostvars['app-1']['ansible_eth0']['ipv4']['address'] }}:8081
+
+  
