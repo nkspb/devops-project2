@@ -13,4 +13,6 @@
 - name: Install kubectl and helm on dev hosts
   hosts: dev-*
   roles:
+    - docker
     - k8s_client
+    - teamcity

@@ -1,0 +1,17 @@
+---
+# tasks file for teamcity
+# - name: Create and start teamcity-server container
+#   community.docker.docker_container:
+#     name: teamcity-server-instance
+#     image: jetbrains/teamcity-server
+#     state: started
+#     volumes:
+#       - /teamcity_data:/data/teamcity_server/datadir
+#       - /var/log/teamcity_server:/opt/teamcity/logs
+#     ports:
+#       - 8111:8111
+
+- name: Start teamcity server container
+  community.docker.docker_compose:
+    project_src: files/teamcity
+  register: output
