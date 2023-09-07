@@ -1,9 +1,9 @@
 ---
 # tasks file for k8s
-- name: Download minikube
-  ansible.builtin.get_url:
-    url: 'https://github.com/kubernetes/minikube/releases/download/v1.29.0/minikube-linux-amd64'
-    dest: /tmp/minikube
+# - name: Download minikube
+#   ansible.builtin.get_url:
+#     url: 'https://github.com/kubernetes/minikube/releases/download/v1.29.0/minikube-linux-amd64'
+#     dest: /tmp/minikube
 
 - name: Install minikube
   ansible.builtin.shell: 'install /tmp/minikube /usr/local/bin/'
