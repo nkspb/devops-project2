@@ -1,4 +1,4 @@
-# Create SSH key to access vms using its value from variables
+# Create SSH key to access vms
 resource "openstack_compute_keypair_v2" "nkom_ssh_key" {
   name       = "nkom-ssh-key"
   region     = var.region
@@ -38,9 +38,9 @@ resource "openstack_networking_router_interface_v2" "router_interface_private_ne
 resource "openstack_blockstorage_volume_v3" "volume" {
   count = length(var.vms)
   name                 = "volume-${var.vms[count.index]}"
-  size                 = "10"
+  size                 = var.volume_size[count.index]
   image_id             = data.openstack_images_image_v2.os_image.id
-  volume_type          = "fast.${var.az_zone}"
+  volume_type          = "${var.volume_type[count.index]}.${var.az_zone}"
   availability_zone    = var.az_zone
   enable_online_resize = true
   lifecycle {
@@ -52,7 +52,7 @@ resource "openstack_blockstorage_volume_v3" "volume" {
 resource "openstack_compute_instance_v2" "vm" {
   count = length(var.vms)
   name              = var.vms[count.index]
-  flavor_id         = data.openstack_compute_flavor_v2.small.id
+  flavor_id         = var.vm_flavor[count.index]
   key_pair          = openstack_compute_keypair_v2.nkom_ssh_key.id
   availability_zone = var.az_zone
   network {

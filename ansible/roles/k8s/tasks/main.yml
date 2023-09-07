@@ -5,8 +5,8 @@
     url: 'https://github.com/kubernetes/minikube/releases/download/v1.29.0/minikube-linux-amd64'
     dest: /tmp/minikube
 
-# - name: Install minikube
-#   ansible.builtin.shell: 'install /tmp/minikube /usr/local/bin/'
+- name: Install minikube
+  ansible.builtin.shell: 'install /tmp/minikube /usr/local/bin/'
 
 - name: Install kubectl
   community.general.snap:
@@ -14,7 +14,26 @@
     classic: yes
     state: present
 
-# - name: Start minikube
-#   ansible.builtin.shell: "minikube start --driver docker"
-#   become: yes
-#   become_user: nkom
+- name: Check if minikube is running
+  ansible.builtin.shell: "minikube status | grep -oP 'apiserver: \\K[^;]*'"
+  become: yes
+  become_user: nkom
+  register: minikube_status
+
+- name: Start minikube
+  ansible.builtin.shell: "minikube start --driver docker"
+  become: yes
+  become_user: nkom
+  when: minikube_status.stdout != "Running"
+
+- name: Check if kube proxy is running
+  ansible.builtin.shell: "ps ef | grep \"kubectl proxy --address='0.0.0.0'\""
+  become: yes
+  become_user: nkom
+  register: kubeproxy_status
+
+- name: Start kube proxy
+  ansible.builtin.shell: "nohup kubectl proxy --address='0.0.0.0' --disable-filter=true 1>/dev/null 2>&1 &"
+  become: yes
+  become_user: nkom
+  when: kubeproxy_status.stdout == ""

@@ -1,0 +1,37 @@
+---
+# tasks file for esk
+- name: Install pip
+  ansible.builtin.apt:
+    name: "python3-pip"
+    state: present
+    update_cache: true
+
+- name: Install requests module
+  ansible.builtin.pip:
+    name:
+      - requests
+    state: present
+
+- name: Start elasticsearch container
+  community.docker.docker_container:
+    name: elasticsearch
+    image: elasticsearch:8.6.2
+    state: started
+    ports:
+      - "9200:9200"
+    ulimits: 
+      - "memlock:-1:-1"
+    env:
+        cluster.name: "el-cluster"
+        discovery.type: "single-node"
+        bootstrap.memory_lock: "true"
+        ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        xpack.security.enabled: "false"
+
+- name: Start kibana container
+  community.docker.docker_container:
+    name: kibana
+    image: kibana:8.6.2
+    state: started
+    ports:
+      - "5601:5601"

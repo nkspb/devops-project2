@@ -4,13 +4,23 @@
   roles:
     - users
 
-- name: Install docker and k8s on app hosts
-  hosts: app-*
+- name: Set up app hosts
+  hosts: 
+    - app-*
   roles:
     - docker
     - k8s
 
-- name: Install kubectl and helm on dev hosts
+- name: Set up dev hosts
   hosts: dev-*
   roles:
+    - docker
     - k8s_client
+    - teamcity
+    - teamcity_agent
+
+- name: Set up prom hosts
+  hosts: prom-*
+  roles:
+    - docker
+    - esk

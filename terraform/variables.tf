@@ -43,6 +43,20 @@ variable "vms" {
 	description = "Names of app vms to create"
 }
 
+variable "volume_size" {
+	type = list
+	description = "Volume size for vms"
+}
+
+variable "volume_type" {
+  type = list
+  description = "Volume type for vms"
+}
+
+variable "vm_flavor" {
+	type = list
+	description = "VM flavors"
+}
 variable "vms_public" {
 	type = list
 	description = "Names of app vms to associate public IP with"

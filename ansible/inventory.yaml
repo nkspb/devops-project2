@@ -1,0 +1,13 @@
+all:
+  hosts:
+    app-1:
+      ansible_host:   31.129.32.117 
+    prom-1:
+      ansible_host:   31.129.32.3 
+    log-1:
+      ansible_host:   45.94.123.91 
+    dev-1:
+      ansible_host:   31.129.32.208 
+  vars:
+    ansible_ssh_user: root
+    ansible_ssh_private_key_file: .id_rsa

@@ -1,0 +1,10 @@
+---
+# tasks file for teamcity_agent
+# install agent prerequisites
+- name: Install prerequisites
+  ansible.builtin.apt:
+    pkg:
+      - unzip
+      - default-jre
+    state: present
+    update_cache: yes
