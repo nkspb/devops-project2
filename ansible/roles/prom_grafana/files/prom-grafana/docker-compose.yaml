@@ -1,0 +1,91 @@
+version: '3.9'
+services:
+  prometheus:
+    image: prom/prometheus:2.41.0
+    volumes:
+      - ./prometheus:/etc/prometheus/
+    container_name: prometheus
+    hostname: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+
+  node-exporter:
+    image: prom/node-exporter:1.5.0
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    container_name: exporter-srv
+    hostname: exporter-srv
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points
+      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.23.0
+    ports:
+      - 9115:9115
+    restart: always
+    volumes:
+      - ./blackbox:/config
+    command: --config.file=/config/blackbox.yml
+
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    user: "0"
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    restart: always
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/etc/alertmanager/data'
+
+  # alertmanager-bot:
+  #   command:
+  #     - --alertmanager.url=http://alertmanager:9093
+  #     - --log.level=info
+  #     - --store=bolt
+  #     - --bolt.path=/data/bot.db
+  #     - --telegram.admin=X
+  #     - --telegram.token=X
+  #   image: metalmatze/alertmanager-bot:0.4.3
+  #   user: root
+  #   ports:
+  #     - 8080:8080
+  #   container_name: alertmanager-bot
+  #   hostname: alertmanager-bot
+  #   environment:
+  #     TZ: "Europe/Moscow"
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./data:/data
+
+  grafana:
+    image: grafana/grafana:9.3.2
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    container_name: grafana
+    hostname: grafana
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    user: "0"

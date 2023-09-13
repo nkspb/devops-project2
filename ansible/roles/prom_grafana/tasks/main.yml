@@ -1,0 +1,14 @@
+---
+# tasks file for prom_grafana
+- name: Create directory for compose files
+  ansible.builtin.file:
+    path: /usr/bin/prom-grafana
+    state: directory
+
+- name: Copy compose files
+  ansible.builtin.copy:
+    src: prom-grafana
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: "700"

@@ -1,2 +1,10 @@
 ---
 # defaults file for k8s_client
+obj_def_path: /usr/bin/monitoring
+obj_def_list:
+  - fluentd/fluentd-account.yaml
+  - fluentd/fluentd-deployment.yaml
+  - kube-state-metrics/kube-state-metrics-account.yaml
+  - kube-state-metrics/kube-state-metrics-service.yaml
+  - node-exporter/daemonset-node-exporter.yaml
+  - node-exporter/service-node-exporter.yaml

@@ -4,23 +4,31 @@
   roles:
     - users
 
-- name: Set up app hosts
-  hosts: 
-    - app-*
-  roles:
-    - docker
-    - k8s
+# - name: Set up app hosts
+#   hosts: 
+#     - app-*
+#   roles:
+#     - docker
+#     - k8s
 
 - name: Set up dev hosts
   hosts: dev-*
   roles:
-    - docker
+    # - docker
     - k8s_client
-    - teamcity
-    - teamcity_agent
+    # - teamcity
+    # - teamcity_agent
+    # - git
 
-- name: Set up prom hosts
-  hosts: prom-*
-  roles:
-    - docker
-    - esk
+# - name: Set up prom hosts
+#   hosts: prom-*
+#   roles:
+#     - docker
+#     - prom_grafana
+
+# - name: Set up log hosts
+#   hosts: log-*
+#   roles: 
+#     - docker
+#     - esk
+

@@ -1,5 +1,17 @@
 ---
 # tasks file for k8s_client
+- name: Install pip
+  ansible.builtin.apt:
+    name: "python3-pip"
+    state: present
+    update_cache: true
+
+- name: Install kubernetes module
+  ansible.builtin.pip:
+    name:
+      - kubernetes
+    state: present
+
 - name: Install kubectl
   community.general.snap:
     name: kubectl
@@ -46,4 +58,19 @@
   with_items:
     -  http://{{ hostvars['app-1']['ansible_eth0']['ipv4']['address'] }}:8001
 
+- name: Copy monitoring manifests
+  ansible.builtin.copy:
+    src: monitoring
+    dest: /usr/bin
+    owner: nkom
+    group: nkom
+    mode: "700" 
+
+- name: Apply manifests
+  ansible.builtin.k8s:
+    kubeconfig: /home/nkom/.kube/config
+    src: "{{ obj_def_path}}/{{ item }}"
+    state: present
+    apply: true
+  loop: "{{ obj_def_list }}"
   

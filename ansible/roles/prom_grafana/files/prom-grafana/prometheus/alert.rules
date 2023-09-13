@@ -1,0 +1,42 @@
+groups:
+- name: remote
+  rules: 
+  - alert: status_code_app
+    expr: probe_http_status_code != 200
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Status code of {{ $labels.instance }} is not 200"
+
+  - alert: probe_duration
+    expr: sum(probe_http_duration_seconds{instance="http://51.250.4.142:30000"}) > 0.3
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Probe duration of {{ $labels.instance }} is more than 0.3 seconds"
+
+  - alert: no_app_replicas
+    expr:  absent_over_time(kube_deployment_spec_replicas{deployment="pg-app"}[10s])
+    for: 0m
+    labels:
+      severity: critical
+    annotations: 
+      summary: "All replicas of pg-app are down"
+
+  - alert: no_db_replicas
+    expr: absent_over_time(kube_statefulset_status_replicas{statefulset="pg-statefulset"}[10s])
+    for: 0m
+    labels:
+      severity: critical
+    annotations: 
+      summary: "All replicas of pg-statefulset are down"
+
+  - alert: small_free_space_srv_node
+    expr: node_filesystem_free_bytes{instance="exporter-srv:9100"} < 2147483648
+    for: 0m
+    labels:
+      severity: warning
+    annotations: 
+      summary: "Less than 2GB of free space available on {{ $labels.instance }}"
